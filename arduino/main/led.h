@@ -1,7 +1,10 @@
 /**
- * @file led.h
- * Header file for LEDs for NRM Navigation
-*/
+ ******************************************************************************
+ * @file led.cpp
+ * @author Rachel Chiong
+ * @brief LED Header file
+ ******************************************************************************
+ */
 
 #ifndef __NRM_LED_H__
 #define __NRM_LED_H__
@@ -34,9 +37,11 @@ extern CRGB leds[NUM_LEDS];
 // const struct CRGB LED_Colour[2] = {struct CRGB(255, 0, 0), CRGB(255, 165, 0)};
 
 // For demo, only define two sets of LEDs
-const LED_Position_t LED_Position_NE = {0, 4};
-const LED_Position_t LED_Position_NW = {4, 8};
-const LED_Position_t LED_Positions[2] = {LED_Position_NE, LED_Position_NW};
+const LED_Position_t LED_Position_NE = {0, 3};
+const LED_Position_t LED_Position_NW = {4, 7};
+const LED_Position_t LED_Position_NW_S = {8, 10};
+
+const LED_Position_t LED_Positions[3] = {LED_Position_NE, LED_Position_NW, LED_Position_NW_S};
 
 /* === Public Functions ==================================================== */
 

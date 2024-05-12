@@ -1,6 +1,6 @@
 /**
  ******************************************************************************
- * @file tof.c
+ * @file tof.cpp
  * @author Rachel Chiong
  * @brief TOF source file
  ******************************************************************************
@@ -13,23 +13,29 @@
 // Store Imagers in an array
 TOF_Imager_t TOF_Imagers[8];
 
-SparkFun_VL53L5CX testImager;
-VL53L5CX_ResultsData measurementData;
-
 int imageResolution; //Used to pretty print output
 int imageWidth; //Used to pretty print output
 
 /* === Functions =========================================================== */
 
-void TOF_config(TOF_Position_e TOF_ID) {
-  TOF_Imagers[TOF_ID].TOF_ID = TOF_ID;
-  // TOF_Imagers[TOF_ID].i2c_address = 0x52;
+void TOF_MUX_Select(int TOF_ID) {
+  if (TOF_ID > 7) return;
+ 
+  Wire.beginTransmission(I2C_MUX_ADDR);
+  Wire.write(1 << TOF_ID);
+  Wire.endTransmission();
+}
+
+void TOF_config(int TOF_ID) {
+
+  TOF_Imagers[TOF_ID].TOF_ID = (TOF_Position_e) TOF_ID;
   SparkFun_VL53L5CX imager;
   VL53L5CX_ResultsData measurement;
   TOF_Imagers[TOF_ID].measurementData = measurement;
   TOF_Imagers[TOF_ID].imager = imager;
 
-  // TOF_Imagers[TOF_NE].imager.setAddress(TOF_Imagers[TOF_NE].i2c_address);
+  // Select the TOF to use from the MUX
+  TOF_MUX_Select(TOF_ID);
 
   if (TOF_Imagers[TOF_ID].imager.begin() == false) {
     Serial.printf("[TOF] %d: Not found at address: %2X\n", TOF_NE, TOF_Imagers[TOF_NE].i2c_address);
@@ -48,13 +54,16 @@ void TOF_init(void) {
   Wire.setClock(400000); //Sensor has max I2C freq of 400kHz
 
   Serial.println("Successfully configured clock");
-  for (TOF_Position_e i = 0; i < 1; i++) {
+  for (int i = 0; i < TOF_NUM_TEST; i++) {
     TOF_config(i);
   }
-  Serial.println("Successfully initialised TOF");
+  Serial.printf("Successfully initialised %d TOFs.", TOF_NUM_TEST);
 }
 
 void TOF_scan(int TOF_ID) {
+
+  TOF_MUX_Select(TOF_ID);
+
   if (TOF_Imagers[TOF_ID].imager.isDataReady() == true) {
     // Read distance data into array
     if (TOF_Imagers[TOF_ID].imager.getRangingData(&TOF_Imagers[TOF_ID].measurementData)) {

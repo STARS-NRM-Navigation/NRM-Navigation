@@ -1,12 +1,21 @@
 /**
- *
-*/
+ ******************************************************************************
+ * @file led.cpp
+ * @author Rachel Chiong
+ * @brief LED source file
+ ******************************************************************************
+ */
 
 #include "led.h"
 
 /* === Public Variables ==================================================== */
 
 CRGB leds[NUM_LEDS];
+
+int DangerThreshold = DANGER;
+int WarningThreshold = WARNING;
+
+/* === Functions =========================================================== */
 
 void LED_init(void) {
   FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
@@ -16,17 +25,17 @@ void LED_init(void) {
 
 void LED_processing(int TOF_ID, int* position_arr) {
   for (int i = 0; i < 4; i++) {
-    if (position_arr[i] < DANGER) {
+    if (position_arr[i] < DangerThreshold) {
 
-      leds[LED_Position_NE.start + i] = CRGB(255, 0, 0);
+      leds[LED_Positions[TOF_ID].start + i] = CRGB(255, 0, 0);
       FastLED.show();
-    } else if (position_arr[i] < WARNING) {
+    } else if (position_arr[i] < WarningThreshold) {
 
-      leds[LED_Position_NE.start + i] = CRGB(255, 165, 0);
+      leds[LED_Positions[TOF_ID].start + i] = CRGB(255, 165, 0);
       FastLED.show();
     } else {
 
-      leds[LED_Position_NE.start + i] = CRGB(0, 0, 0);
+      leds[LED_Positions[TOF_ID].start + i] = CRGB(0, 0, 0);
       FastLED.show();
     }
   }

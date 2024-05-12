@@ -1,6 +1,6 @@
 /**
  ******************************************************************************
- * @file tof.c
+ * @file tof.cpp
  * @author Rachel Chiong
  * @brief TOF header file
  ******************************************************************************
@@ -21,9 +21,9 @@
 #define TOF_RESOLUTION 64 // 8 x 8 array
 #define TOF_IMG_WIDTH 8
 
-#define TOF_NE_ADDR 0x52
-#define TOF_NW_ADDR 0x52
-// Additional TOF addresses will be defined here...
+#define TOF_NUM_TEST 2
+
+#define I2C_MUX_ADDR 0x70
 
 /* === Typedefs ============================================================ */
 
@@ -58,6 +58,7 @@ extern int imageWidth; //Used to pretty print output
 
 /* === Public Functions ==================================================== */
 
+void TOF_MUX_Select(int TOF_ID);
 void TOF_init(void);
 void TOF_scan(int TOF_ID);
 void TOF_Grid_Processing(int TOF_ID, int* new_aggregate_columns);
