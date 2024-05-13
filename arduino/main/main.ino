@@ -53,7 +53,7 @@ void loop() {
   // Run TOF scan
   for (int i = 0; i < 1; i++) {
     TOF_scan(i);
-    TOF_Grid_Processing_min(TOF_NE, grid);
+    TOF_Grid_Processing(TOF_NE, grid);
     sprintf(lcd_buffer, "Processed Grid [%d]: %d, %d, %d, %d\n", i, grid[0], grid[1], grid[2], grid[3]);
     printf("Processed Grid [%d]: %d, %d, %d, %d\n", i, grid[0], grid[1], grid[2], grid[3]);
     print_lcd(lcd_buffer);
