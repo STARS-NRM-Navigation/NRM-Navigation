@@ -34,9 +34,6 @@ void TOF_config(int TOF_ID) {
   TOF_Imagers[TOF_ID].measurementData = measurement;
   TOF_Imagers[TOF_ID].imager = imager;
 
-  // Select the TOF to use from the MUX
-  // TOF_MUX_Select(TOF_ID);
-
   if (TOF_Imagers[TOF_ID].imager.begin() == false) {
     Serial.printf("[TOF] %d: Not found at address: %2X\n", TOF_NE, TOF_Imagers[TOF_NE].i2c_address);
     while (1) ;

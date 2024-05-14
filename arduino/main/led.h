@@ -22,8 +22,8 @@
 /* === Typedefs ============================================================ */
 
 typedef enum {
-  DANGER = 1500,
-  WARNING = 3000
+  DANGER = 200,
+  WARNING = 500
 } thresholds_e;
 
 typedef struct {

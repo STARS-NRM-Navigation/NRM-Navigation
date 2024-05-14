@@ -17,6 +17,8 @@
 #include "tof.h"
 #include "led.h"
 
+#include <ArduinoUnit.h>
+
 /* === Global Variables ==================================================== */
 int value = 0;
 int grid[8];
@@ -31,12 +33,22 @@ void print_lcd(char* buffer) {
     M5.Lcd.setCursor(0, 0);
   }
 }
+// #define UNITTEST
+/* === Unit Test Prototypes ================================================ */
+void LED_Processing_Danger(void);
+void LED_Processing_Warning(void);
+void LED_Processing_Mixed(void);
 
 /* === Main ================================================================ */
 
 char lcd_buffer[80];
 
 void setup() {
+#ifdef UNITTEST
+  Serial.begin(115200); // ESP8266 default of 74880 not supported on Linux
+  Serial.println("------------UNIT TESTING ----------------------");
+#else
+
   M5.begin();
   Serial.begin(115200);
   delay(1000);
@@ -46,9 +58,15 @@ void setup() {
 
   LED_init();
   TOF_init();
+  
+#endif
 }
 
 void loop() {
+
+#ifdef UNITTEST
+  Test::run();
+#else
 
   // Run TOF scan
   for (int i = 0; i < 1; i++) {
@@ -62,4 +80,45 @@ void loop() {
   }
 
   delay(50); //Small delay between polling
+#endif
+}
+
+/* === Unit Tests ============================================================ */
+
+void LED_Processing_Danger(void) {
+  int TOF_ID = 1;
+  int position_arr[4] = {100, 300, 500, 700};
+  LED_processing(TOF_ID, position_arr);
+  
+  assertEqual(leds[LED_Positions[TOF_ID].start + 0].raw[0], CRGB(255, 0, 0).raw[0]);
+  assertEqual(leds[LED_Positions[TOF_ID].start + 1].raw[0], CRGB(255, 0, 0).raw[0]);
+  assertEqual(leds[LED_Positions[TOF_ID].start + 2].raw[0], CRGB(255, 0, 0).raw[0]);
+  assertEqual(leds[LED_Positions[TOF_ID].start + 3].raw[0], CRGB(255, 0, 0).raw[0]);
+}
+
+void LED_Processing_Warning(void) {
+  int TOF_ID = 1;
+  int position_arr[4] = {1501, 2000, 1977, 1600};
+  LED_processing(TOF_ID, position_arr);
+  
+  assertEqual(leds[LED_Positions[TOF_ID].start + 0].raw[1], CRGB(255, 165, 0).raw[1]);
+  assertEqual(leds[LED_Positions[TOF_ID].start + 1].raw[1], CRGB(255, 165, 0).raw[1]);
+  assertEqual(leds[LED_Positions[TOF_ID].start + 2].raw[1], CRGB(255, 165, 0).raw[1]);
+  assertEqual(leds[LED_Positions[TOF_ID].start + 3].raw[1], CRGB(255, 165, 0).raw[1]);
+}
+
+void LED_Processing_Mixed(void) {
+  int TOF_ID = 1;
+  int position_arr[4] = {1501, 2000, 200, 800};
+  LED_processing(TOF_ID, position_arr);
+  
+  assertEqual(leds[LED_Positions[TOF_ID].start + 0].raw[1], CRGB(255, 165, 0).raw[1]);
+  assertEqual(leds[LED_Positions[TOF_ID].start + 1].raw[1], CRGB(255, 165, 0).raw[1]);
+  assertEqual(leds[LED_Positions[TOF_ID].start + 2].raw[0], CRGB(255, 0, 0).raw[0]);
+  assertEqual(leds[LED_Positions[TOF_ID].start + 3].raw[0], CRGB(255, 0, 0).raw[0]);
+
+}
+
+void TOF_Config_Test(void) {
+  
 }
