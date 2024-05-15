@@ -35,7 +35,7 @@ void LED_processing(int TOF_ID, int* position_arr) {
       FastLED.show();
     } else {
 
-      leds[LED_Positions[TOF_ID].start + i] = CRGB(0, 0, 0);
+      leds[LED_Positions[TOF_ID].start + i] = CRGB(0, 255, 0);
       FastLED.show();
     }
   }

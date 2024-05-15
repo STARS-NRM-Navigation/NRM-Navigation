@@ -11,7 +11,7 @@
 
 /* === Includes ============================================================ */
 
-#include <Arduino.h>
+// #include <Arduino.h>
 #include <Wire.h>
 #include <SparkFun_VL53L5CX_Library.h>
 
@@ -43,6 +43,7 @@ typedef struct {
  uint8_t i2c_address;
  SparkFun_VL53L5CX imager;
  VL53L5CX_ResultsData measurementData;
+ bool active;
 } TOF_Imager_t;
 
 /* === Global Variables ==================================================== */
