@@ -18,12 +18,28 @@
 #include "led.h"
 
 #include <ArduinoUnit.h>
+// #include "mqtt.h"
+// #include <ArduinoJson.h>
 
 /* === Global Variables ==================================================== */
 int value = 0;
 int grid[8];
 
+// StaticJsonDocument<1024> doc;
+
+// Create the root array
+// JsonArray root = doc.to<JsonArray>();
+
 /* === Helper Functions ==================================================== */
+
+// void create_object(int id, int* gridArray) {
+//   JsonObject obj = root.createNestedObject();
+//   obj["id"] = id;
+//   JsonArray grid = doc.createNestedArray("grid");
+//   for (int i = 0; i < GRID_SIZE; i++) {
+//     grid.add(test[i]);  // Add elements from the test array to the grid array
+//   }
+// }
 
 void print_lcd(char* buffer) {
   ++value;
@@ -58,7 +74,7 @@ void setup() {
 
   LED_init();
   TOF_init();
-  
+
 #endif
 }
 
@@ -69,17 +85,21 @@ void loop() {
 #else
 
   // Run TOF scan
-  for (int i = 0; i < 1; i++) {
-    TOF_scan(i);
-    TOF_Grid_Processing(TOF_NE, grid);
-    sprintf(lcd_buffer, "Processed Grid [%d]: %d, %d, %d, %d\n", i, grid[0], grid[1], grid[2], grid[3]);
-    printf("Processed Grid [%d]: %d, %d, %d, %d\n", i, grid[0], grid[1], grid[2], grid[3]);
-    print_lcd(lcd_buffer);
-    // Turn appropriate LEDs on
-    LED_processing(i, grid);
+  for (int i = 0; i < 8; i++) {
+    if (TOF_Imagers[i].active) {
+      TOF_scan(i);
+      TOF_Grid_Processing_min(i, grid);
+      sprintf(lcd_buffer, "Processed Grid [%d]: %d, %d, %d, %d\n", i, grid[0], grid[1], grid[2], grid[3]);
+      // printf("Processed Grid [%d]: %d, %d, %d, %d\n", i, grid[0], grid[1], grid[2], grid[3]);
+      print_lcd(lcd_buffer);
+      // Turn appropriate LEDs on
+      LED_processing(i, grid);
+    } else {
+      // printf("[%d] SENSOR NOT ACTIVE\n", i);
+    }
   }
 
-  delay(50); //Small delay between polling
+  delay(20); //Small delay between polling
 #endif
 }
 
@@ -89,7 +109,7 @@ void LED_Processing_Danger(void) {
   int TOF_ID = 1;
   int position_arr[4] = {100, 300, 500, 700};
   LED_processing(TOF_ID, position_arr);
-  
+
   assertEqual(leds[LED_Positions[TOF_ID].start + 0].raw[0], CRGB(255, 0, 0).raw[0]);
   assertEqual(leds[LED_Positions[TOF_ID].start + 1].raw[0], CRGB(255, 0, 0).raw[0]);
   assertEqual(leds[LED_Positions[TOF_ID].start + 2].raw[0], CRGB(255, 0, 0).raw[0]);
@@ -100,7 +120,7 @@ void LED_Processing_Warning(void) {
   int TOF_ID = 1;
   int position_arr[4] = {1501, 2000, 1977, 1600};
   LED_processing(TOF_ID, position_arr);
-  
+
   assertEqual(leds[LED_Positions[TOF_ID].start + 0].raw[1], CRGB(255, 165, 0).raw[1]);
   assertEqual(leds[LED_Positions[TOF_ID].start + 1].raw[1], CRGB(255, 165, 0).raw[1]);
   assertEqual(leds[LED_Positions[TOF_ID].start + 2].raw[1], CRGB(255, 165, 0).raw[1]);
@@ -111,7 +131,7 @@ void LED_Processing_Mixed(void) {
   int TOF_ID = 1;
   int position_arr[4] = {1501, 2000, 200, 800};
   LED_processing(TOF_ID, position_arr);
-  
+
   assertEqual(leds[LED_Positions[TOF_ID].start + 0].raw[1], CRGB(255, 165, 0).raw[1]);
   assertEqual(leds[LED_Positions[TOF_ID].start + 1].raw[1], CRGB(255, 165, 0).raw[1]);
   assertEqual(leds[LED_Positions[TOF_ID].start + 2].raw[0], CRGB(255, 0, 0).raw[0]);
@@ -120,5 +140,5 @@ void LED_Processing_Mixed(void) {
 }
 
 void TOF_Config_Test(void) {
-  
+
 }

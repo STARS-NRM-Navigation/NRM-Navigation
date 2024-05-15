@@ -11,7 +11,7 @@
 
 /* === Includes ============================================================ */
 
-#include <Arduino.h>
+// #include <Arduino.h>
 #include <FastLED.h>
 
 /* === Defines ============================================================= */
@@ -22,8 +22,8 @@
 /* === Typedefs ============================================================ */
 
 typedef enum {
-  DANGER = 200,
-  WARNING = 500
+  DANGER = 800,
+  WARNING = 1500
 } thresholds_e;
 
 typedef struct {
