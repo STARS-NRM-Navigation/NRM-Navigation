@@ -25,7 +25,7 @@
 #define FEATURE_AUNIT 1
 #define FEATURE_AUNIT_VERBOSE 2
 
-int ledDiagnosticArray[6] = {LED_DANGER - 100, LED_DANGER - 100, LED_WARNING + 100, LED_WARNING + 100, LED_OK + 100, LED_OK + 100};
+int ledDiagnosticArray[6] = {LED_DANGER - 100, LED_DANGER - 100, LED_WARNING - 100, LED_WARNING - 100, LED_OK + 100, LED_OK + 100};
 
 /* === Functions =========================================================== */
 
@@ -40,9 +40,10 @@ void setup() {
 //   Serial.setLineModeUnix();
 // #endif
   LED_init();
-  LED_processing(0, ledDiagnosticArray);
+  
 }
 
 void loop() {
+  LED_processing(0, ledDiagnosticArray);
   // aunit::TestRunner::run();
 }

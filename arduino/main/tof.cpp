@@ -179,9 +179,9 @@ void TOF_init(void) {
   Wire.begin(); //This resets I2C bus to 100kHz
   Wire.setClock(1000000); //Sensor has max I2C freq of 1MHz
 
-  // TOF_config_raw();
-  TOF_config(TOF_NE, 0x44, -1);
-  TOF_config(TOF_NW, 0x29, TOF_RST_PIN);
+  TOF_config_raw();
+  // TOF_config(TOF_NE, 0x44, -1);
+  // TOF_config(TOF_NW, 0x29, TOF_RST_PIN);
 
   Serial.printf("Successfully initialised %d TOFs.", TOF_NUM_TEST);
 }
