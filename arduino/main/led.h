@@ -23,8 +23,15 @@
 
 typedef enum {
   DANGER = 1500,
-  WARNING = 3000
+  WARNING = 2000,
+  GOOD = 2500
 } thresholds_e;
+
+typedef enum {
+  RED_v = 255,
+  GREEN_v = 165,
+  BLUE_v = 0
+} RGB_values;
 
 typedef struct {
   int start;

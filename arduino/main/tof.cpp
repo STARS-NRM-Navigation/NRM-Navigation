@@ -81,38 +81,20 @@ void TOF_scan(int TOF_ID) {
   }
 }
 
-void TOF_Grid_Processing(int TOF_ID, int* new_aggregate_columns) {
+void TOF_Grid_Processing(int TOF_ID, int* aggregate_columns) {
   // Get data
   VL53L5CX_ResultsData data = TOF_Imagers[TOF_ID].measurementData;
   // get average per two columns
-  int aggregate_columns[TOF_IMG_WIDTH] = {0, 0, 0, 0, 0, 0, 0, 0};
   int column = 0;
-
   for (int y = 0 ; y < TOF_RESOLUTION ; y += TOF_IMG_WIDTH) {
-      for (int x = TOF_IMG_WIDTH - 1 ; x >= 0; x--) {
-        aggregate_columns[x] = aggregate_columns[x] + TOF_Imagers[TOF_ID].measurementData.distance_mm[x + y];
+    int min = TOF_Imagers[TOF_ID].measurementData.distance_mm[(TOF_IMG_WIDTH - 1) + y];
+    for (int x = TOF_IMG_WIDTH - 1 ; x >= 0; x--) {
+      if (TOF_Imagers[TOF_ID].measurementData.distance_mm[x + y] < min) {
+        min = TOF_Imagers[TOF_ID].measurementData.distance_mm[x + y];
       }
-  }
-
-  for (int i = 0; i < TOF_IMG_WIDTH; i += 2) {
-    int result = (aggregate_columns[i] + aggregate_columns[i+1])/(TOF_IMG_WIDTH * 2);
-    new_aggregate_columns[i/2] = result;
-  }
-}
-
-void TOF_Grid_Processing_min(int TOF_ID, int* aggregate_columns) {
- // Get data
- VL53L5CX_ResultsData data = TOF_Imagers[TOF_ID].measurementData;
- int aggregate_columns_2[TOF_IMG_WIDTH] = {0, 0, 0, 0, 0, 0, 0, 0};
- int column = 0;
- // Create array of values and find minimum in each column
- for (int y = 0; y < TOF_RESOLUTION; y += TOF_IMG_WIDTH) {
-  int min = TOF_Imagers[TOF_ID].measurementData.distance_mm[(TOF_IMG_WIDTH-1) + y];
-  for (int x = TOF_IMG_WIDTH - 1; x >= 0; x--) {
-    if (TOF_Imagers[TOF_ID].measurementData.distance_mm[x + y] < min) {
-      min = TOF_Imagers[TOF_ID].measurementData.distance_mm[x + y];
+      aggregate_columns[x] = min;
     }
   }
-  aggregate_columns_2[y] = min;
- }
 }
+
+

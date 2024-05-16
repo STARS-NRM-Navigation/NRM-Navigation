@@ -62,6 +62,5 @@ void TOF_MUX_Select(int TOF_ID);
 void TOF_init(void);
 void TOF_scan(int TOF_ID);
 void TOF_Grid_Processing(int TOF_ID, int* new_aggregate_columns);
-void TOF_Grid_Processing_min(int TOF_ID, int* new_aggregate_columns);
 
 #endif // __NRM_LED_H__

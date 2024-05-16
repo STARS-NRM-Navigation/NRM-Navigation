@@ -54,8 +54,8 @@ void loop() {
   for (int i = 0; i < 1; i++) {
     TOF_scan(i);
     TOF_Grid_Processing(TOF_NE, grid);
-    sprintf(lcd_buffer, "Processed Grid [%d]: %d, %d, %d, %d\n", i, grid[0], grid[1], grid[2], grid[3]);
-    printf("Processed Grid [%d]: %d, %d, %d, %d\n", i, grid[0], grid[1], grid[2], grid[3]);
+    sprintf(lcd_buffer, "Processed Grid [%d]: %d, %d, %d, %d, %d, %d, %d, %d\n", i, grid[0], grid[1], grid[2], grid[3], grid[4], grid[5], grid[6], grid[7]);
+    printf("Processed Grid [%d]: %d, %d, %d, %d, %d, %d, %d, %d\n", i, grid[0], grid[1], grid[2], grid[3], grid[4], grid[5], grid[6], grid[7]);
     print_lcd(lcd_buffer);
     // Turn appropriate LEDs on
     LED_processing(i, grid);
