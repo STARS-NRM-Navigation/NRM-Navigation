@@ -99,7 +99,7 @@ void loop() {
   for (int i = 0; i < 8; i++) {
     if (TOF_Imagers[i].active) {
       TOF_scan(i);
-      TOF_Grid_Processing_min(i, grid);
+      TOF_Grid_Processing(i, grid);
 #ifdef ARDUINO_M5STACK_Core2
       sprintf(lcd_buffer, "Processed Grid [%d]: %d, %d, %d, %d\n", i, grid[0], grid[1], grid[2], grid[3]);
       // printf("Processed Grid [%d]: %d, %d, %d, %d\n", i, grid[0], grid[1], grid[2], grid[3]);
