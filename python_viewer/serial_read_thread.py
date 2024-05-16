@@ -70,12 +70,14 @@ def getdata(ser):
                 s1_DONE=True
                 print('s1 Done')
 
-            if 'ID: 1' in reading:
+            elif 'ID: 1' in reading:
                 s2=reading.split('[')[1].split(']')[0].split(',')[0:-1]
                 s2=np.asarray(s2).astype(int)
                 s2=np.reshape(s2,(8,8))
                 s2_DONE=True
                 print('s2 Done')
+            else:
+                print(reading)
 
 def update(i):
     print('update')
