@@ -9,12 +9,18 @@ import matplotlib
 import numpy as np 
 import matplotlib as mpl
 import time
+from threading import Thread
 import signal
 import sys
 
 colors = [(255/255, 0, 0), (255/255, 165/255, 0), (0, 255/255, 0,)]
 bounds = [0, 1000, 2000, 4000]
 
+global s1 
+
+s1= -np.ones((8,8))
+global s2 
+s2 = -np.ones((8,8))
 
 # this port address is for the serial tx/rx pins on the GPIO header
 SERIAL_PORT = 'COM4'
@@ -43,16 +49,17 @@ elif COLORMAP==2:
     newcmp = LinearSegmentedColormap.from_list("",colors)
     norm = matplotlib.colors.TwoSlopeNorm(vmin=800., vcenter=1500, vmax=4000)
 
-def getdata():
+def getdata(ser):
+    
+    global s1
+    global s2
+    global thread_stop
+
     if DEBUG==True:
         return np.random.randint(0,4000,(8,8)), np.random.randint(0,4000,(8,8))
     else:
-        s1_DONE=False
-        s2_DONE=False
-
-        ser = serial.Serial(SERIAL_PORT, SERIAL_RATE)
-        ser.flushInput()
-        while True:
+       
+        while thread_stop==False:
             reading = ser.readline().decode('utf-8')
                                             
             if 'ID: 0' in reading:
@@ -69,14 +76,8 @@ def getdata():
                 s2_DONE=True
                 print('s2 Done')
 
-            if ((s1_DONE==True) and (s2_DONE==True)):
-                break
-
-        return s1,s2
-
 def update(i):
-    s1,s2=getdata()
-
+    print('update')
     im1.set_data(s1)
     im2.set_data(s2)
     
@@ -94,17 +95,26 @@ def write_text(data,ax):
     for (j,i),label in np.ndenumerate(data):
         ax.text(i,j,label,ha='center',va='center')
 
+thread_stop=False
 def shutdown(sig, frame):
+  global thread_stop
+  thread_stop = True
   print("Server shutting down...")
   sys.exit(0)
 
-#MAIN CODE
 signal.signal(signal.SIGINT, shutdown)
-fig, (ax1,ax2) = plt.subplots(1,2)
-im1 = ax1.imshow(np.zeros((8,8)), cmap=newcmp,norm=norm)
-im2 = ax2.imshow(np.zeros((8,8)), cmap=newcmp,norm=norm)
+#MAIN CODE
 
-ani = FuncAnimation(plt.gcf(), update, interval=1)
+fig, (ax1,ax2) = plt.subplots(1,2)
+im1 = ax1.imshow(s1, cmap=newcmp,norm=norm)
+im2 = ax2.imshow(s2, cmap=newcmp,norm=norm)
+
+ser = serial.Serial(SERIAL_PORT, SERIAL_RATE)
+
+thread=Thread(target=getdata, args=(ser,))
+thread.start()
+
+ani = FuncAnimation(plt.gcf(), update, interval=100)
 plt.show()
 
 
