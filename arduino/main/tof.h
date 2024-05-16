@@ -11,7 +11,12 @@
 
 /* === Includes ============================================================ */
 
-// #include <Arduino.h>
+#ifdef ARDUINO_M5STACK_Core2
+#include <M5Core2.h>
+#else
+#include <Arduino.h>
+#endif
+
 #include <Wire.h>
 #include <SparkFun_VL53L5CX_Library.h>
 

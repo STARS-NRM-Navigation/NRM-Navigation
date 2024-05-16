@@ -8,7 +8,13 @@
 /* === Includes ============================================================ */
 
 // External Libraries
+
+#ifdef ARDUINO_M5STACK_Core2
 #include <M5Core2.h>
+#else
+#include <Arduino.h>
+#endif
+
 #include <FastLED.h>
 #include <Wire.h>
 #include <SparkFun_VL53L5CX_Library.h> //http://librarymanager/All#SparkFun_VL53L5CX
@@ -18,8 +24,6 @@
 #include "led.h"
 
 #include <ArduinoUnit.h>
-// #include "mqtt.h"
-// #include <ArduinoJson.h>
 
 /* === Global Variables ==================================================== */
 int value = 0;
@@ -41,6 +45,7 @@ int grid[8];
 //   }
 // }
 
+#ifdef ARDUINO_M5STACK_Core2
 void print_lcd(char* buffer) {
   ++value;
   M5.Lcd.println(buffer);
@@ -49,6 +54,8 @@ void print_lcd(char* buffer) {
     M5.Lcd.setCursor(0, 0);
   }
 }
+#endif
+
 // #define UNITTEST
 /* === Unit Test Prototypes ================================================ */
 void LED_Processing_Danger(void);
@@ -64,13 +71,17 @@ void setup() {
   Serial.begin(115200); // ESP8266 default of 74880 not supported on Linux
   Serial.println("------------UNIT TESTING ----------------------");
 #else
-
+#ifdef ARDUINO_M5STACK_Core2
   M5.begin();
+#endif
   Serial.begin(115200);
   delay(1000);
-  Serial.println("NRM_Navigation FW v0.0.1");
+  Serial.println("----------------- NRM_Navigation FW v0.1.0 ---------------------------");
   Serial.println("Initializing sensor board. This can take up to 10s. Please wait.");
+
+#ifdef ARDUINO_M5STACK_Core2
   M5.Lcd.println("LCD on");
+#endif
 
   LED_init();
   TOF_init();
@@ -89,9 +100,11 @@ void loop() {
     if (TOF_Imagers[i].active) {
       TOF_scan(i);
       TOF_Grid_Processing_min(i, grid);
+#ifdef ARDUINO_M5STACK_Core2
       sprintf(lcd_buffer, "Processed Grid [%d]: %d, %d, %d, %d\n", i, grid[0], grid[1], grid[2], grid[3]);
       // printf("Processed Grid [%d]: %d, %d, %d, %d\n", i, grid[0], grid[1], grid[2], grid[3]);
       print_lcd(lcd_buffer);
+#endif
       // Turn appropriate LEDs on
       LED_processing(i, grid);
     } else {

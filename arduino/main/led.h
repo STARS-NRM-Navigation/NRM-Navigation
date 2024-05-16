@@ -10,8 +10,12 @@
 #define __NRM_LED_H__
 
 /* === Includes ============================================================ */
+#ifdef ARDUINO_M5STACK_Core2
+#include <M5Core2.h>
+#else
+#include <Arduino.h>
+#endif
 
-// #include <Arduino.h>
 #include <FastLED.h>
 
 /* === Defines ============================================================= */
