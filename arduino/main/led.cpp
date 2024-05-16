@@ -52,13 +52,17 @@ void LED_processing(int TOF_ID, int* position_arr) {
     if (position_arr[i] < DangerThreshold) {
 
       leds[LED_Positions[TOF_ID].start + i] = CRGB(255, 0, 0);
+      // nblend(leds[LED_Positions[TOF_ID].start + i], CRGB(255, 0, 0), 128);	
       FastLED.show();
+
     } else if (position_arr[i] > OKThreshold) {
 
       leds[LED_Positions[TOF_ID].start + i] = CRGB(255, 165, 0);
+      // nblend(leds[LED_Positions[TOF_ID].start + i], CRGB(255, 165, 0), 128);	
       FastLED.show();
     } else {
       RGBvalues = gradient_processing(position_arr[i]);
+      // nblend(leds[LED_Positions[TOF_ID].start + i], CRGB(RGBvalues[0], RGBvalues[1], RGBvalues[2]), 128);	
       leds[LED_Positions[TOF_ID].start + i] = CRGB(RGBvalues[0], RGBvalues[1], RGBvalues[2]);
       FastLED.show();
     }

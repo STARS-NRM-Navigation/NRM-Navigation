@@ -205,20 +205,52 @@ void TOF_scan(int TOF_ID) {
   }
 }
 
+// void TOF_Grid_Processing(int TOF_ID, int* aggregate_columns) {
+//   // Get data
+//   VL53L5CX_ResultsData data = TOF_Imagers[TOF_ID].measurementData;
+//   // get average per two columns
+//   int column = 0;
+//   for (int y = 0 ; y < TOF_RESOLUTION ; y += TOF_IMG_WIDTH) {
+//     int min = TOF_Imagers[TOF_ID].measurementData.distance_mm[(TOF_IMG_WIDTH - 1) + y];
+//     for (int x = TOF_IMG_WIDTH - 1 ; x >= 0; x--) {
+//       if (TOF_Imagers[TOF_ID].measurementData.distance_mm[x + y] < min) {
+//         min = TOF_Imagers[TOF_ID].measurementData.distance_mm[x + y];
+//       }
+//       aggregate_columns[x] = min;
+//     }
+//   }
+// }
+
 void TOF_Grid_Processing(int TOF_ID, int* aggregate_columns) {
   // Get data
   VL53L5CX_ResultsData data = TOF_Imagers[TOF_ID].measurementData;
   // get average per two columns
-  int column = 0;
+  int columns[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+  int c = 0;
   for (int y = 0 ; y < TOF_RESOLUTION ; y += TOF_IMG_WIDTH) {
     int min = TOF_Imagers[TOF_ID].measurementData.distance_mm[(TOF_IMG_WIDTH - 1) + y];
-    for (int x = TOF_IMG_WIDTH - 1 ; x >= 0; x--) {
+    for (int x = TOF_IMG_WIDTH - 3 ; x >= 0; x--) {
       if (TOF_Imagers[TOF_ID].measurementData.distance_mm[x + y] < min) {
         min = TOF_Imagers[TOF_ID].measurementData.distance_mm[x + y];
       }
-      aggregate_columns[x] = min;
+      columns[c] = min;
+      
+    }
+    c++;
+    Serial.printf("%d ", min);
+  }
+  
+  Serial.printf("\n");
+
+  for (int i = 0; i < TOF_IMG_WIDTH; i += 2) {
+    if (columns[i] < columns[i+1]) {
+      aggregate_columns[i/2] = columns[i];
+    } else {
+       aggregate_columns[i/2] = columns[i+1];
     }
   }
+
+  Serial.printf("%d, %d, %d, %d\n", aggregate_columns[0], aggregate_columns[1], aggregate_columns[2], aggregate_columns[3]);
 }
 
 
