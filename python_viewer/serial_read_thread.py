@@ -120,18 +120,22 @@ def shutdown(sig, frame):
   sys.exit(0)
 
 signal.signal(signal.SIGINT, shutdown)
-#MAIN CODE
 
-fig, (ax1,ax2) = plt.subplots(1,2)
-im1 = ax1.imshow(s1, cmap=newcmp,norm=norm)
-im2 = ax2.imshow(s2, cmap=newcmp,norm=norm)
+if __name__ == "__main__":
+    #MAIN CODE
+    fig, (ax1,ax2) = plt.subplots(1,2)
+    im1 = ax1.imshow(s1, cmap=newcmp,norm=norm)
+    im2 = ax2.imshow(s2, cmap=newcmp,norm=norm)
 
-ser = serial.Serial(SERIAL_PORT, SERIAL_RATE)
+    try:
+        ser = serial.Serial(SERIAL_PORT, SERIAL_RATE)
 
-thread=Thread(target=getdata, args=(ser,))
-thread.start()
+        thread=Thread(target=getdata, args=(ser,))
+        thread.start()
 
-ani = FuncAnimation(plt.gcf(), update, interval=100)
-plt.show()
+        ani = FuncAnimation(plt.gcf(), update, interval=100)
+        plt.show()
+    except:
+        print(f"Serial connection to board not detected on port: {SERIAL_PORT}.\nPlease connect the board, or change the port on line 27.")
 
 
