@@ -63,17 +63,31 @@ def getdata(ser):
         while thread_stop==False:
             reading = ser.readline().decode('utf-8')
 
-            if 'ID: 0' in reading:
+            if 'ID: 1' in reading:
                 s1=reading.split('[')[1].split(']')[0].split(',')[0:-1]
                 s1=np.asarray(s1).astype(int)
+
+                # Drop corrupt or incorrect packets
+                if np.size(s1) != 64:
+                    continue
+
                 s1=np.reshape(s1,(8,8))
+                s1=np.flip(s1)
+                s1=np.flip(s1,axis=0)
                 s1_DONE=True
                 print('s1 Done')
 
-            elif 'ID: 1' in reading:
+            elif 'ID: 0' in reading:
                 s2=reading.split('[')[1].split(']')[0].split(',')[0:-1]
                 s2=np.asarray(s2).astype(int)
+
+                # Drop corrupt or incorrect packets
+                if np.size(s2) != 64:
+                    continue
+
                 s2=np.reshape(s2,(8,8))
+                s2=np.flip(s2)
+                s2=np.flip(s2,axis=0)
                 s2_DONE=True
                 print('s2 Done')
             else:
