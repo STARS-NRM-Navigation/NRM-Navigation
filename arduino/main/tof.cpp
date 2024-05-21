@@ -7,6 +7,7 @@
  */
 
 #include "tof.h"
+#include "led.h"
 
 /* === Global Variables ==================================================== */
 
@@ -253,4 +254,36 @@ void TOF_Grid_Processing(int TOF_ID, int* aggregate_columns) {
   Serial.printf("%d, %d, %d, %d\n", aggregate_columns[0], aggregate_columns[1], aggregate_columns[2], aggregate_columns[3]);
 }
 
+// updated code
+// void TOF_Grid_Processing(int TOF_ID, int* aggregate_columns) {
+//   // Get data
+//   VL53L5CX_ResultsData data = TOF_Imagers[TOF_ID].measurementData;
+//   // get average per two columns
+//   int columns[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+//   int c = 0;
+//   for (int y = 0 ; y < TOF_RESOLUTION ; y += TOF_IMG_WIDTH) {
+//     int min = GOOD;
+//     for (int x = TOF_IMG_WIDTH - 3 ; x >= 0; x--) {
+//       if (TOF_Imagers[TOF_ID].measurementData.distance_mm[x + y] == expectedLength) {
+//         continue;
+//       }
+//       if (TOF_Imagers[TOF_ID].measurementData.distance_mm[x + y] < min) {
+//         min = TOF_Imagers[TOF_ID].measurementData.distance_mm[x + y];
+//       }
+//       columns[c] = min;
+      
+//     }
+//     c++;
+//     Serial.printf("%d ", min);
+//   }
 
+//   for (int i = 0; i < TOF_IMG_WIDTH; i += 2) {
+//     if (columns[i] < columns[i+1]) {
+//       aggregate_columns[i/2] = columns[i];
+//     } else {
+//       aggregate_columns[i/2] = columns[i+1];
+//     }
+//   }
+
+//   Serial.printf("%d, %d, %d, %d\n", aggregate_columns[0], aggregate_columns[1], aggregate_columns[2], aggregate_columns[3]);
+// }
