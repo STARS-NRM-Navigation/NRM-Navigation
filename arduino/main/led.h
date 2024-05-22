@@ -26,9 +26,9 @@
 /* === Typedefs ============================================================ */
 
 typedef enum {
-  DANGER = 100,
-  WARNING = 200,
-  GOOD = 320
+  DANGER = 1000,
+  WARNING = 1500,
+  GOOD = 2000
 } thresholds_e;
 
 typedef enum {

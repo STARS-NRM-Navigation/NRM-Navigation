@@ -13,7 +13,9 @@
 CRGB leds[NUM_LEDS];
 
 int DangerThreshold = DANGER;
+int Orange = (DANGER+WARNING)/2;
 int WarningThreshold = WARNING;
+int Lime = (WARNING+GOOD)/2;
 int OKThreshold = GOOD;
 
 /* === Functions =========================================================== */
@@ -24,46 +26,25 @@ void LED_init(void) {
   Serial.println("LEDs successfully initialised.");
 }
 
-int* gradient_processing(int distance) {
-  // Initialise variables
-  int red;
-  int green;
-  // Calculate RGB values
-  if (distance > WARNING) {
-    double factor = (double)(distance-WARNING)/(GOOD - WARNING);
-    red = (int)(RED_v * (1 - factor));
-    green = (int)(GREEN_v);
-  } else if (distance <= WARNING) {
-    double factor = (double)(distance-DANGER)/(WARNING - DANGER);
-    red = (int)(RED_v);
-    green = (int)(RED_v * factor);
-  }
-  // Assign RGB values to the array
-  int RGBvalues[3] = {red, green, BLUE_v};
-  // RGBvalues[0] = red;
-  // RGBvalues[1] = green;
-  // RGBvalues[2] = BLUE;
-  return RGBvalues;
-}
+
 
 void LED_processing(int TOF_ID, int* position_arr) {
-  int* RGBvalues;
+//int* RGBvalues;
   for (int i = 0; i < 8; i++) {
     if (position_arr[i] < DangerThreshold) {
 
       leds[LED_Positions[TOF_ID].start + i] = CRGB(255, 0, 0);
-      // nblend(leds[LED_Positions[TOF_ID].start + i], CRGB(255, 0, 0), 128);	
       FastLED.show();
 
-    } else if (position_arr[i] > OKThreshold) {
-
-      leds[LED_Positions[TOF_ID].start + i] = CRGB(255, 165, 0);
-      // nblend(leds[LED_Positions[TOF_ID].start + i], CRGB(255, 165, 0), 128);	
+    } else if (position_arr[i] < Orange) {
+      leds[LED_Positions[TOF_ID].start + i] = CRGB(255,140,0);
       FastLED.show();
-    } else {
-      RGBvalues = gradient_processing(position_arr[i]);
-      // nblend(leds[LED_Positions[TOF_ID].start + i], CRGB(RGBvalues[0], RGBvalues[1], RGBvalues[2]), 128);	
-      leds[LED_Positions[TOF_ID].start + i] = CRGB(RGBvalues[0], RGBvalues[1], RGBvalues[2]);
+    } else if (position_arr[i] < WarningThreshold) {
+
+      leds[LED_Positions[TOF_ID].start + i] = CRGB(255,255,0);
+      FastLED.show();
+    } else {	
+      leds[LED_Positions[TOF_ID].start + i] = CRGB(0, 165, 0);
       FastLED.show();
     }
   }
