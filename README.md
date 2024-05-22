@@ -34,3 +34,14 @@ This board uses the same ESP32 chip and is cross-compatible with the M5Core2 (in
 4. Then, select ```Tools -> Programmer -> ESPTools```.
 ![alt text](images/programmer.png)
 5. Now, compile and flash the board. Everything written for the M5Core2 should work as intended.
+
+## Setting up the programming environment for the ESP32 DEVKIT V1 DOIT board
+This board uses the same ESP32 chip and is cross-compatible with the M5Core2 and the ESP-WROOM-32 (including pinouts and clocks). However, there are a few differences regarding the use of the microcontoller.
+
+1. Follow setup instruction of the ESP-WROOM-32 (ESP32 Plus).
+2. Download additional drivers from the [manufacture webpage](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=downloads).
+3. Install drivers - System dependent ! For windows devices use device manager. After succesfully installing the drivers, the device should pop up in the Ports section as shown below.
+![alt text](images/Driver.png)
+4. While flashing new code, the BOOT key (RED) has to be pressed.
+5. After sucessfully flashing the board, the EN Pin (YELLOW) has to be pressed.
+![alt text](images/ESP32-DEVKIT-V1-DOIT-board.png)
