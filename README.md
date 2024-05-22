@@ -41,7 +41,7 @@ This board uses the same ESP32 chip and is cross-compatible with the M5Core2 and
 1. Follow the setup instructions of the ESP-WROOM-32 (ESP32 Plus).
 2. Download additional drivers from the [manufacture webpage](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=downloads).
 3. Install drivers - System dependent! For Windows devices use device manager. After installing the drivers, the device should be listed in the Ports section as shown below.
-![alt text](images/Driver.png)
+![alt text](images/Driver.PNG)
 4. The BOOT key (RED) must be pressed while flashing new code.
 5. After flashing the board, the EN Pin (YELLOW) has to be pressed.
-![alt text](images/ESP32-DEVKIT-V1-DOIT-board.png)
+![alt text](images/ESP32-DEVKIT-V1-DOIT-board.PNG)
