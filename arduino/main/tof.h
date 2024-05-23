@@ -28,6 +28,8 @@
 
 #define TOF_NUM_TEST 2
 
+#define expectedLength 0
+
 #define I2C_MUX_ADDR 0x70
 
 /* === Typedefs ============================================================ */

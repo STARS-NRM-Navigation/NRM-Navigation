@@ -112,7 +112,7 @@ void loop() {
     }
   }
 
-  delay(100); //Small delay between polling
+  delay(20); //Small delay between polling
 #endif
 }
 
