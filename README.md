@@ -30,20 +30,7 @@ This folder contains the necessary files and scripts to generate a depth map usi
 This image shows a comparison between the monocular camera, depth camera and the depth map generation along with object detection.
 
 1. **Generating Depth Map**:
-    - Place your input images in the `input_images` folder.
-    - Run the following script:
-        ```sh
-        python camera-detection.py
-        ```
-    - The output depth maps will be saved in the `output_depth_maps` folder.
-
-2. **Object Detection**:
-    - Place your input images in the `input_images` folder.
-    - Run the following script:
-        ```sh
-        python detect_objects.py
-        ```
-    - The output images with detected objects will be saved in the `output_detected_objects` folder.
+    - Run `camera_depth_detection_v2.py` and enjoy!
 
 ## File Structure
 - `camera_depth_detection_v1.py`: This script is for only depth map generataion.
