@@ -16,7 +16,7 @@ This folder contains the necessary files and scripts to generate a depth map usi
 ## Installation
 1. Clone the repository:
     ```sh
-    git clone -b camera-v0.1.0 [https://github.com/yourusername/yourrepository.git](https://github.com/STARS-NRM-Navigation/NRM-Navigation/)
+    git clone -b camera-v0.1.0 https://github.com/STARS-NRM-Navigation/NRM-Navigation/
     cd your_repository
     ```
 
